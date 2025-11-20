@@ -55,8 +55,8 @@ history_mlp = mlp_model.fit(
     x_train_mlp,
     y_train,
     validation_split=0.2,   #20% of training data used for validation
-    EPOCHS = 15
-    BATCH_SIZE = 64
+    EPOCHS = 15,
+    BATCH_SIZE = 64,
     epochs=EPOCHS,
     batch_size=BATCH_SIZE,
     verbose=2
