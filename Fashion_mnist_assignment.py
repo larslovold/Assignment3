@@ -62,7 +62,7 @@ history_mlp = mlp_model.fit(
 
 #plot training and validation - for question 1
 def plot_history(history, title_prefix="MLP"):
-    # Loss
+    #Loss
     plt.figure(figsize=(6, 4))
     plt.plot(history.history["loss"], label="train_loss")
     plt.plot(history.history["val_loss"], label="val_loss")
@@ -74,7 +74,7 @@ def plot_history(history, title_prefix="MLP"):
     plt.tight_layout()
     plt.show()
 
-    # Accuracy
+    #Accuracy
     plt.figure(figsize=(6, 4))
     plt.plot(history.history["accuracy"], label="train_accuracy")
     plt.plot(history.history["val_accuracy"], label="val_accuracy")
@@ -88,7 +88,7 @@ def plot_history(history, title_prefix="MLP"):
 
 plot_history(history_mlp, title_prefix="MLP")
 
-# Print final training & validation metrics (last epoch)
+#Print final training and validation metrics (last epoch)
 final_train_loss = history_mlp.history["loss"][-1]
 final_train_acc = history_mlp.history["accuracy"][-1]
 final_val_loss = history_mlp.history["val_loss"][-1]
@@ -99,3 +99,33 @@ print(f"Train loss:      {final_train_loss:.4f}")
 print(f"Train accuracy:  {final_train_acc:.4f}")
 print(f"Val loss:        {final_val_loss:.4f}")
 print(f"Val accuracy:    {final_val_acc:.4f}")
+
+#evalute on test set
+test_loss_mlp, test_acc_mlp = mlp_model.evaluate(x_test_mlp, y_test, verbose=0)
+print("\n=== MLP Test Metrics ===")
+print(f"Test loss:       {test_loss_mlp:.4f}")
+print(f"Test accuracy:   {test_acc_mlp:.4f}")
+
+#confusion matrix for MLP 
+#Predict class probabilities for test data
+y_pred_probs_mlp = mlp_model.predict(x_test_mlp)
+#Convert probs to class indices
+y_pred_mlp = np.argmax(y_pred_probs_mlp, axis=1)
+
+#Compute confusion matrix
+cm_mlp = confusion_matrix(y_test, y_pred_mlp)
+
+#Plot confusion matrix
+plt.figure(figsize=(8, 8))
+disp = ConfusionMatrixDisplay(confusion_matrix=cm_mlp,
+                              display_labels=class_names)
+disp.plot(include_values=True,
+          xticks_rotation=45,
+          ax=plt.gca(),
+          colorbar=False)
+plt.title("Confusion Matrix - MLP on Fashion-MNIST")
+plt.tight_layout()
+plt.show()
+
+print("\nConfusion matrix shape:", cm_mlp.shape)
+
