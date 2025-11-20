@@ -129,3 +129,33 @@ plt.show()
 
 print("\nConfusion matrix shape:", cm_mlp.shape)
 
+#attempting Q4
+#Preprocessing for CNN model
+x_train_cnn = x_train.astype("float32") / 255.0
+x_test_cnn = x_test.astype("float32") / 255.0
+
+x_train_cnn = np.expand_dims(x_train_cnn, -1) 
+x_test_cnn = np.expand_dims(x_test_cnn, -1)   
+
+print("\nx_train_cnn shape:", x_train_cnn.shape)
+print("x_test_cnn shape:", x_test_cnn.shape)
+
+#Build the CNN model
+cnn_model = keras.Sequential([
+    layers.Conv2D(32, (3, 3), activation="relu", input_shape=(28, 28, 1)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation="relu"),
+    layers.MaxPooling2D((2, 2)),
+    layers.Flatten(),
+    layers.Dense(128, activation="relu"),
+    layers.Dropout(0.3),
+    layers.Dense(10, activation="softmax")
+])
+
+cnn_model.compile(
+    loss="sparse_categorical_crossentropy",
+    optimizer=keras.optimizers.Adam(learning_rate=1e-3),
+    metrics=["accuracy"],
+)
+
+cnn_model.summary()
