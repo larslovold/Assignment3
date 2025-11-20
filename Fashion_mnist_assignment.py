@@ -159,3 +159,44 @@ cnn_model.compile(
 )
 
 cnn_model.summary()
+
+#Train the CNN model
+EPOCHS_CNN = 10
+BATCH_SIZE_CNN = 64
+
+history_cnn = cnn_model.fit(
+    x_train_cnn,
+    y_train,
+    validation_split=0.2,
+    epochs=EPOCHS_CNN,
+    batch_size=BATCH_SIZE_CNN,
+    verbose=2
+)
+
+#Plot training history for CNN 
+plot_history(history_cnn, title_prefix="CNN")
+
+#Evaluate the CNN on test set
+test_loss_cnn, test_acc_cnn = cnn_model.evaluate(x_test_cnn, y_test, verbose=0)
+print("\n=== CNN Test Metrics ===")
+print(f"CNN Test loss:     {test_loss_cnn:.4f}")
+print(f"CNN Test accuracy: {test_acc_cnn:.4f}")
+
+#Confusion matrix for CNN
+y_pred_probs_cnn = cnn_model.predict(x_test_cnn)
+y_pred_cnn = np.argmax(y_pred_probs_cnn, axis=1)
+
+cm_cnn = confusion_matrix(y_test, y_pred_cnn)
+
+plt.figure(figsize=(8, 8))
+disp_cnn = ConfusionMatrixDisplay(confusion_matrix=cm_cnn,
+                                  display_labels=class_names)
+disp_cnn.plot(include_values=True,
+              xticks_rotation=45,
+              ax=plt.gca(),
+              colorbar=False)
+plt.title("Confusion Matrix - CNN on Fashion-MNIST (Optional Q4)")
+plt.tight_layout()
+plt.show()
+
+print("\nDone.")
